@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # 1. MySQL Database Server
+  db:
+    image: mysql:8.0
+    container_name: mysql_database
+    restart: always
+    environment:
+      # These will be pulled from your .env file
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+
+  # 2. Django Web Server
+  web:
+    build: .
+    container_name: django_api_service
+    command: gunicorn core_project.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - app_data:/app/persistent_data
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    restart: always
+    depends_on:
+      - db
+
+  # 3. Celery Worker
+  worker:
+    build: .
+    container_name: celery_worker_service
+    command: celery -A core_project worker --loglevel=info
+    volumes:
+      - .:/app
+      - app_data:/app/persistent_data
+    env_file:
+      - .env
+    restart: always
+    depends_on:
+      - web
+      - db
+
+volumes:
+  # Stores ChromaDB
+  app_data:
+  # Stores all MySQL tables and user data securely
+  mysql_data:

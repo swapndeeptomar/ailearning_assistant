@@ -1,0 +1,13 @@
+body.login-page {
+    background: url("/static/img/ai_background.png") no-repeat center center fixed !important;
+    background-size: cover !important;
+}
+
+.login-box, .card {
+    border-radius: 16px !important;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25) !important;
+}
+
+.login-logo a, .brand-text {
+    font-weight: 700 !important;
+}
