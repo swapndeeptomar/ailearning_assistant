@@ -7,17 +7,19 @@ services:
     container_name: mysql_database
     restart: always
     environment:
-      # These will be pulled from your .env file
+      # These will be pulled from your .env file  
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./mysql_init:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
     env_file:
       - .env
+      - .env.docker
 
   # 2. Django Web Server
   web:
@@ -31,6 +33,7 @@ services:
       - "8000:8000"
     env_file:
       - .env
+      - .env.docker
     restart: always
     depends_on:
       - db
@@ -45,6 +48,7 @@ services:
       - app_data:/app/persistent_data
     env_file:
       - .env
+      - .env.docker
     restart: always
     depends_on:
       - web

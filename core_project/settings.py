@@ -19,6 +19,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
+# (If running in Docker, these are already set by docker-compose, so this step won't overwrite them)
+load_dotenv(os.path.join(BASE_DIR, '.env.local'))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -181,10 +184,27 @@ DATABASES = {
         'USER': 'root',        
         'PASSWORD': '1234',    
         'HOST': 'localhost',            
-        'PORT': '3306',                 
+        'PORT': '3306',               
     }
 }
 
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'), 
+        'PORT': os.environ.get('DB_PORT',3306),
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            # This helps prevent dropped connections in production
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
+    }
+}
+ 
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
