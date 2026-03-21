@@ -1,13 +1,12 @@
 version: '3.8'
 
 services:
-  # 1. MySQL Database Server
+  # 1. MySQL Database
   db:
     image: mysql:8.0
     container_name: mysql_database
     restart: always
     environment:
-      # These will be pulled from your .env file  
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
@@ -21,9 +20,10 @@ services:
       - .env
       - .env.docker
 
-  # 2. Django Web Server
+  # 2. Django Web
   web:
     build: .
+    image: myapp:latest
     container_name: django_api_service
     command: gunicorn core_project.wsgi:application --bind 0.0.0.0:8000
     volumes:
@@ -40,7 +40,7 @@ services:
 
   # 3. Celery Worker
   worker:
-    build: .
+    image: myapp:latest
     container_name: celery_worker_service
     command: celery -A core_project worker --loglevel=info
     volumes:
@@ -55,7 +55,5 @@ services:
       - db
 
 volumes:
-  # Stores ChromaDB
   app_data:
-  # Stores all MySQL tables and user data securely
   mysql_data:
