@@ -12,7 +12,6 @@ services:
     ports:
       - "3307:3306"
     env_file:
-      - .env
       - .env.docker
 
   # 2. Django Web

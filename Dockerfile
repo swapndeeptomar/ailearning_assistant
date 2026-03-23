@@ -17,14 +17,11 @@ RUN apt-get update && apt-get install -y \
 # Install Python deps
 COPY requirements.txt .
 
-# Step 1: remove torch line from requirements dynamically
-RUN grep -v "torch" requirements.txt > req.txt
-
 # Step 2: install CPU torch FIRST
 RUN pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu torch==2.5.1
 
 # Step 3: install rest dependencies
-RUN pip install --no-cache-dir -r req.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy project
 COPY . .
