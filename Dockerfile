@@ -1,12 +1,13 @@
-# Use a stable Python 3.10 slim image
+# Base image
 FROM python:3.10-slim
 
+# Env settings
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Install system dependencies
+# System dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     default-libmysqlclient-dev \
@@ -14,19 +15,24 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python deps
+# Copy dependency files
 COPY requirements.txt .
+COPY constraints.txt .
 
-# Step 2: install CPU torch FIRST
-RUN pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu torch==2.5.1
+# Upgrade pip (important for stability)
+RUN pip install --upgrade pip
 
-# Step 3: install rest dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# 🔥 Install dependencies with constraints (KEY STEP)
+RUN pip install --no-cache-dir --default-timeout=100 --retries 10 \
+    -r requirements.txt \
+    -c constraints.txt \
+    --index-url https://download.pytorch.org/whl/cpu
 
-# Copy project
+# Copy project code
 COPY . .
 
 # Create persistent directory
 RUN mkdir -p /app/persistent_data
 
+# Expose port
 EXPOSE 8000
