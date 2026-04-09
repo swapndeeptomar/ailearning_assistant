@@ -1,232 +1,251 @@
-🚀 AI Learning Assistant – Backend API
+# 🚀 AI Learning Assistant – Backend API
 
-An advanced AI-powered Learning Assistant platform backend built using Django, designed to transform static study materials into intelligent, interactive learning experiences.
+[![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com/)
+[![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-This system leverages Retrieval-Augmented Generation (RAG), asynchronous processing, and AI integrations to provide features like document-based chat, quiz generation, flashcards, interview preparation, and personalized video recommendations.
+> An advanced AI-powered Learning Assistant backend built with **Django** that transforms static study materials into intelligent, interactive learning experiences using **RAG**, asynchronous processing, and modern AI integrations.
 
-📌 Overview
+---
 
-The backend powers a scalable SaaS-based EdTech platform where users can:
+## 📋 Table of Contents
 
-Upload PDFs and interact with them using AI
-Generate notes, quizzes, and flashcards
-Practice interviews with an AI-driven system
-Get personalized YouTube learning recommendations
-Track performance and manage AI usage via credits
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Tech Stack](#tech-stack)
+- [System Architecture](#system-architecture)
+- [Core Workflows](#core-workflows)
+- [API Documentation](#api-documentation)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Environment Variables](#environment-variables)
+  - [Local Setup](#local-setup)
+  - [Docker Setup (Recommended)](#docker-setup-recommended)
+- [Database Design](#database-design)
+- [Technical Highlights](#technical-highlights)
+- [Use Cases](#use-cases)
+- [Future Enhancements](#future-enhancements)
+- [Contributing](#contributing)
+- [License](#license)
 
-The system is designed using modern backend architecture principles, ensuring scalability, responsiveness, and maintainability.
+---
 
-✨ Key Features
+## Overview
 
-🧠 AI-Powered Learning
-Context-aware document chat (RAG-based)
-AI-generated summaries, quizzes, and flashcards
-Intelligent concept explanations
+This backend powers a scalable **SaaS-based EdTech platform** that enables users to:
 
-📄 Asynchronous Document Processing
-Heavy tasks (PDF parsing, chunking, embeddings) handled via Celery workers
-Ensures non-blocking API performance
+- Upload PDFs and interact with them using AI
+- Generate intelligent notes, quizzes, and flashcards
+- Practice interviews with AI-driven evaluation
+- Receive personalized YouTube video recommendations
+- Track learning progress and manage AI usage through a credit system
 
-🔍 Semantic Search with Vector Embeddings
-Uses sentence-transformers to generate embeddings
-Enables highly accurate contextual retrieval
+Built with modern backend architecture principles, the system ensures **scalability**, **responsiveness**, and **maintainability**.
 
-💬 Real-Time AI Chat (Streaming)
-Implemented using Django Channels + WebSockets
-Streams responses token-by-token for real-time UX
+---
 
-🎤 AI Interview System (3D Avatar Ready)
-Simulates real interview scenarios
-Generates questions using AI
-Evaluates responses and provides feedback
-Designed to integrate with live 3D avatar interaction
+## ✨ Key Features
 
-🎥 AI-Based YouTube Recommendations
-Extracts concepts using AI
-Fetches relevant videos via YouTube API
-Enhances multimodal learning experience
+### 🧠 AI-Powered Learning
+- Context-aware document chat using **Retrieval-Augmented Generation (RAG)**
+- AI-generated summaries, quizzes, and flashcards
+- Intelligent concept explanations
 
-💳 Credit-Based Usage System
-Tracks API usage
-Deducts credits per AI action
-Enables cost optimization and SaaS monetization
+### 📄 Asynchronous Document Processing
+- Heavy tasks (PDF parsing, chunking, embeddings) handled via **Celery** workers
+- Non-blocking API responses for better user experience
 
-💰 Payment Integration
-Integrated with Razorpay API
-Supports premium subscription workflows
+### 🔍 Semantic Search
+- Vector embeddings generated using **sentence-transformers**
+- Highly accurate contextual retrieval
 
-📚 API Documentation (OpenAPI)
-Auto-generated API docs using drf-spectacular
-Interactive Swagger UI for all endpoints
-Structured request/response schemas
+### 💬 Real-Time AI Chat
+- Streaming responses using **Django Channels + WebSockets**
+- Token-by-token streaming for smooth UX
 
-🛠️ Tech Stack
-⚙️ Backend
-Django
-Django REST Framework
+### 🎤 AI Interview System
+- Simulates real interview scenarios
+- AI-generated questions with response evaluation and feedback
+- Ready for integration with 3D avatars
 
-⚡ Async & Real-Time
-Celery (background processing)
-Redis (message broker + cache)
+### 🎥 Personalized YouTube Recommendations
+- AI concept extraction
+- Relevant video suggestions via YouTube API
 
-🧠 AI / ML
-Google Gemini API
-sentence-transformers (embeddings)
-RAG architecture
+### 💳 Credit-Based Usage System
+- Tracks AI usage and deducts credits
+- Enables cost control and SaaS monetization
 
-🗄️ Database
-MySQL
-☁️ Cloud & Storage
-AWS S3 / Cloudinary (file storage)
-Vercel (frontend)
-Render (backend hosting)
+### 💰 Payment Integration
+- Integrated with **Razorpay** for premium subscriptions
 
-🏗️ System Architecture
-The backend follows a layered and distributed architecture:
+---
 
-Frontend (React)
-        ↓
-Django REST API (Authentication, Business Logic)
-        ↓
-Celery + Redis (Async Processing Layer)
-        ↓
-AI Services (Gemini API, Embeddings)
-        ↓
-Database (MySQL) + Vector Storage
-        ↓
-Cloud Storage (S3 / Cloudinary)
+## 🛠️ Tech Stack
 
-🔄 Core Workflow
-📌 Document Processing Pipeline
+| Layer              | Technologies |
+|--------------------|--------------|
+| **Backend**        | Django, Django REST Framework |
+| **Async & Real-time** | Celery, Redis, Django Channels + WebSockets |
+| **AI / ML**        | Google Gemini API, sentence-transformers, RAG Architecture |
+| **Database**       | MySQL |
+| **Storage**        | AWS S3 / Cloudinary |
+| **Documentation**  | drf-spectacular (OpenAPI) |
+| **Deployment**     | Render (backend), Vercel (frontend) |
 
-User Upload → Django API → Save File
-        ↓
-Trigger Celery Task
-        ↓
-Text Extraction → Chunking → Embeddings
-        ↓
-Store in Vector DB
-        ↓
-Status update → Ready
+---
 
-💬 Chat (RAG Flow)
-User Query → Backend
-        ↓
-Fetch Relevant Chunks
-        ↓
-Send to AI (Gemini)
-        ↓
-Generate Contextual Answer
-        ↓
-Return Response + Store Chat
 
-🎤 Interview Flow
-Start Interview → Generate Questions (AI)
-        ↓
-User Answers
-        ↓
-AI Evaluation (Score + Feedback)
-        ↓
-Store Session + Return Result
+---
 
-🎥 YouTube Recommendation Flow
-Extract Keywords (AI)
-        ↓
-Call YouTube API
-        ↓
-Fetch Relevant Videos
-        ↓
-Store + Return to User
+## 🔄 Core Workflows
 
-📡 API Documentation
+### 📌 Document Processing Pipeline
+1. User uploads PDF → Django API saves file
+2. Celery task triggered
+3. Text extraction → Chunking → Embeddings generation
+4. Store in vector database → Status updated to "Ready"
 
-Interactive API documentation is available via:
+### 💬 RAG Chat Flow
+1. User query received
+2. Relevant chunks retrieved via semantic search
+3. Context sent to Gemini API
+4. Contextual response generated and streamed back
 
-/api/docs/ → Swagger UI
-/api/redoc/ → ReDoc
+### 🎤 Interview Flow
+1. Interview session starts
+2. AI generates domain-specific questions
+3. User answers → AI evaluates with score and feedback
 
-Features:
+### 🎥 YouTube Recommendation Flow
+1. AI extracts key concepts
+2. YouTube API called for relevant videos
+3. Results stored and returned to user
 
-Request/Response schemas
-Authentication support
-Live API testing
+---
 
-⚙️ Environment Setup
+## 📡 API Documentation
 
-🔐 Environment Variables
-.env (Secrets)
+Interactive API documentation is available at:
+
+- **Swagger UI**: `/api/docs/`
+- **ReDoc**: `/api/redoc/`
+
+**Features**:
+- Fully structured request/response schemas
+- Authentication support
+- Live API testing
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.10+
+- Docker & Docker Compose (recommended)
+- MySQL / Redis
+
+### Environment Variables
+
+Create `.env` file in the root directory with the following:
+
+```env
 DJANGO_SECRET_KEY=your_secret_key
 DEBUG=True
-RAZORPAY_KEY_ID=your_key
-RAZORPAY_KEY_SECRET=your_secret
 
-.env.local
+# Database
 DB_NAME=learning_assistant
 DB_USER=root
 DB_PASSWORD=your_password
 DB_HOST=localhost
 DB_PORT=3306
+
+# Redis
 REDIS_HOST=localhost
 
-.env.docker
-DB_HOST=db
-REDIS_HOST=redis
+# Payment
+RAZORPAY_KEY_ID=your_key_id
+RAZORPAY_KEY_SECRET=your_key_secret
 
-🐳 Running with Docker (Recommended)
-docker-compose up --build
-docker-compose exec web python manage.py migrate
-docker-compose exec web python manage.py createsuperuser
+# AI
+GEMINI_API_KEY=your_gemini_api_key
+```
 
-💻 Running Locally
+Local Setup
+# 1. Clone the repository
+git clone https://github.com/yourusername/ai-learning-assistant-backend.git
+cd ai-learning-assistant-backend
+
+# 2. Create and activate virtual environment
 python -m venv venv
-venv\Scripts\activate
+venv\Scripts\activate    # Windows
+# source venv/bin/activate  # Linux/Mac
+
+# 3. Install dependencies
 pip install -r requirements.txt
 
+# 4. Apply migrations
 python manage.py migrate
+
+# 5. Create superuser (optional)
+python manage.py createsuperuser
+
+# 6. Run development server
 python manage.py runserver
 
-# Run Celery (separate terminal)
-celery -A learning_assistant worker --loglevel=info
-📊 Database Design Highlights
+Run Celery worker (in a separate terminal):
+Bashcelery -A learning_assistant worker --loglevel=info
+Docker Setup (Recommended)
+Bashdocker-compose up --build
+
+# Run migrations
+docker-compose exec web python manage.py migrate
+
+# Create superuser
+docker-compose exec web python manage.py createsuperuser
+
+Database Design Highlights
+
 User → Documents (1:M)
 Document → Chunks (1:M)
-Document → Quiz / Flashcards
+Document → Quizzes / Flashcards
 User → ChatHistory
 User → InterviewSession
 User → CreditTransactions
 
-Ensures scalable relational structure with AI outputs
+Fully relational and optimized for AI-generated content.
 
 🔥 Technical Highlights
-Chunk-based processing (handles large PDFs)
-Asynchronous architecture (Celery + Redis)
-RAG-based AI system
-Real-time streaming (WebSockets)
-Credit-based cost control
-Modular multi-app Django structure
-Production-ready API documentation
 
-🎯 Use Cases
-Students for smart learning
+Chunk-based processing for large PDFs
+Fully asynchronous architecture (Celery + Redis)
+Production-ready RAG implementation
+Real-time streaming via WebSockets
+Credit-based cost management
+Modular multi-app Django structure
+Auto-generated OpenAPI documentation
+
+
+Use Cases
+
+Students seeking smart, interactive learning
 Interview preparation platforms
 EdTech SaaS products
 AI-powered content analysis tools
 
-🚀 Future Enhancements
+
+Future Enhancements
+
 Full 3D avatar integration for interviews
 Voice-based interaction
 Multi-language support
 Advanced analytics dashboard
-Mobile application support
+Mobile application backend support
 
-📌 Conclusion
 
-This project demonstrates a real-world implementation of AI + scalable backend architecture in the EdTech domain.
+Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-It combines:
-
-AI intelligence
-Distributed systems
-Real-time communication
-SaaS-based design
-to create a powerful and future-ready learning platform.
+License
+This project is licensed under the MIT License - see the LICENSE file for details.
